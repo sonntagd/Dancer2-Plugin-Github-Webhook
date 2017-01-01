@@ -20,7 +20,7 @@ plugins:
 Define that a route has to be correctly signed:
 
 ```perl
-post '/githubinfo' => require_github_webhook_secret => sub {
+post '/githubinfo' => require_github_webhook_secret sub {
     do_something_with_correctly_signed_payload();
 };
 ```

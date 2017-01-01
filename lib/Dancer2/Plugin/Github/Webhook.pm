@@ -32,7 +32,7 @@ Set the secret in your app configuration if you want it global:
 
 Define that a route has to be correctly signed:
 
-    post '/githubinfo' => require_github_webhook_secret => sub { do_something_with_correctly_signed_payload(); };
+    post '/githubinfo' => require_github_webhook_secret sub { do_something_with_correctly_signed_payload(); };
 
 Define that a route has to be correctly signed with a specific secret.
 

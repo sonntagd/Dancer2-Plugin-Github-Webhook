@@ -44,9 +44,9 @@ get '/otherwebhook' => require_github_webhook_secret config->{githubwebhooks}->{
 ### require_github_webhook_secret [ $secret ]
 
 ```perl
-    post '/delete-item/:id' => require_right delete_item => sub {
-        ...
-    };
+post '/delete-item/:id' => require_github_webhook_secret 'mysecret' => sub {
+    ...
+};
 ```
 
 Only executes the route's sub if the payload is correctly signed. If no secret is given, we use the one 

@@ -48,7 +48,7 @@ Define that a route has to be correctly signed with a specific secret.
 
 =head2 require_github_webhook_secret [ $secret ]
 
-    post '/delete-item/:id' => require_right delete_item => sub {
+    post '/delete-item/:id' => require_github_webhook_secret 'mysecret' => sub {
         ...
     };
 

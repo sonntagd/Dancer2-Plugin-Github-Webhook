@@ -61,7 +61,7 @@ provide it here or use on from the configuration file via C<< config->{anyconfig
 sub require_github_webhook_secret {
     my $plugin  = shift;
     my $coderef = pop;
-    my $secret  = shift || $plugin->secret();
+    my $secret  = shift || $plugin->secret() || $plugin->dsl->log( error => 'No secret given!' );
 
     return sub {
         my $x_hub_signature = $plugin->dsl->request_header('X-Hub-Signature')

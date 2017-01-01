@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More;
 use Plack::Test;
-use HTTP::Request::Common;
+use HTTP::Request;
 use JSON;
 
 {
@@ -14,30 +14,54 @@ use JSON;
 
     set serializer => 'JSON';
 
-    set config => {
-        plugin             => { 'Github::Webhook' => { secret => 'super!s3cret?' } },
-        my_special_secrets => {
-            endpoint_a => 'owiejf20jf',
-            endpoint_b => 'woiUehf29',
-        },
-    };
+    set config => { plugin => { 'Github::Webhook' => { secret => 'super!s3cret?' } }, };
 
-    post '/' => require_github_webhook_secret sub { [1] };
-    post '/a' => require_github_webhook_secret config->{my_special_secrets}->{endpoint_a} => sub { [1] };
-    post '/b' => require_github_webhook_secret config->{my_special_secrets}->{endpoint_a} => sub { [1] };
-    post '/c' => require_github_webhook_secret 'anotherverysecretsecret'                  => sub { [1] };
+    post '/'  => require_github_webhook_secret 'super!s3cret?'           => sub { [1] };
+    post '/a' => require_github_webhook_secret 'sk78fozuhv3efgv'         => sub { [1] };
+    post '/b' => require_github_webhook_secret '89Av34x!jdfl<'           => sub { [1] };
+    post '/c' => require_github_webhook_secret 'anotherverysecretsecret' => sub { [1] };
 
 }
 
-my $test = Plack::Test->create( MyTestApp->to_app );
-my $res  = $test->request( POST '/' );
-ok $res->code == 403, 'Forbidden if no signature is sent';
-ok JSON::from_json( $res->content )->{message} eq 'No X-Hub-Signature found', 'Got message "No X-Hub-Signature found"';
+my $app = MyTestApp->to_app;
 
-$res = $test->request( POST '/' => { 'X-Hub-Signature' => 1 } => JSON::to_json( { some => 'content' } ) );
-ok $res->code == 403, 'Forbidden if wrong is sent';
-ok JSON::from_json( $res->content )->{message} eq 'Not allowed', 'Not allowed because of wrong signature';
+test_psgi $app, sub {
+    my $cb = shift;
 
-is( $res->content, '[1]', 'Correct content' );
+    {
+        my $req = HTTP::Request->new( POST => '/' );
+        my $res = $cb->($req);
+        ok $res->code == 403, 'Forbidden if no signature is sent';
+        ok JSON::from_json( $res->content )->{message} eq 'No X-Hub-Signature found', 'Got message "No X-Hub-Signature found"';
+    }
+
+    {
+        my $req = HTTP::Request->new( POST => '/' => [ 'X-Hub-Signature' => 1 ] );
+        my $res = $cb->($req);
+        ok $res->code == 403, 'Forbidden if wrong signature is sent';
+        ok JSON::from_json( $res->content )->{message} eq 'Not allowed', 'Got message "Not allowed" when using wrong signature';
+    }
+
+    {
+        my $content = JSON::to_json( { some => 'content' } );
+        require Digest::SHA;
+        my $signature = 'sha1=' . Digest::SHA::hmac_sha1_hex( $content, 'super!s3cret?' );
+        my $req = HTTP::Request->new( POST => '/' => [ 'X-Hub-Signature' => $signature ], $content );
+        my $res = $cb->($req);
+        ok $res->code == 200, 'Correct signature is accepted';
+        ok JSON::from_json( $res->content )->[0] eq '1', 'Correct signature is accepted';
+    }
+
+    # $res = $test->request(
+    #     POST '/',
+    #     'X-Hub-Signature' => 1,
+    #     Content           => JSON::to_json( { some => 'content' } ),
+    # );
+    # ok $res->code == 403, 'Forbidden if wrong is sent';
+    # ok JSON::from_json( $res->content )->{message} eq 'Not allowed', 'Not allowed because of wrong signature';
+
+    # is( $res->content, '[1]', 'Correct content' );
+
+};
 
 done_testing();

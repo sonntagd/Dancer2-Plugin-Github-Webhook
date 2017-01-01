@@ -2,6 +2,7 @@ Dancer2-Plugin-Github-Webhook-*
 config.yml
 dancer2.pl
 Dockerfile
+.travis.yml
 .gitignore
 .git/*
 xt/boilerplate.t

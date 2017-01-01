@@ -32,15 +32,15 @@ Set the secret in your app configuration if you want it global:
 
 Define that a route has to be correctly signed:
 
-    get '/githubinfo' => require_github_webhook_secret => sub { do_something_with_correctly_signed_payload(); };
+    post '/githubinfo' => require_github_webhook_secret => sub { do_something_with_correctly_signed_payload(); };
 
 Define that a route has to be correctly signed with a specific secret.
 
-    get '/otherwebhook' => require_github_webhook_secret 'KUksrZyREtM32mIPoxcV7Cqx' => sub {
+    post '/otherwebhook' => require_github_webhook_secret 'KUksrZyREtM32mIPoxcV7Cqx' => sub {
         do_something_with_correctly_signed_payload();
     };
 
-    get '/otherwebhook' => require_github_webhook_secret config->{githubwebhooks}->{otherwebhook} => sub {
+    post '/otherwebhook' => require_github_webhook_secret config->{githubwebhooks}->{otherwebhook} => sub {
         do_something_with_correctly_signed_payload();
     };
 
@@ -48,7 +48,7 @@ Define that a route has to be correctly signed with a specific secret.
 
 =head2 require_github_webhook_secret [ $secret ]
 
-    post '/delete-item/:id' => require_github_webhook_secret 'mysecret' => sub {
+    post '/reload-app' => require_github_webhook_secret 'mysecret' => sub {
         ...
     };
 

@@ -20,7 +20,7 @@ plugins:
 Define that a route has to be correctly signed:
 
 ```perl
-get '/githubinfo' => require_github_webhook_secret => sub {
+post '/githubinfo' => require_github_webhook_secret => sub {
     do_something_with_correctly_signed_payload();
 };
 ```
@@ -28,13 +28,13 @@ get '/githubinfo' => require_github_webhook_secret => sub {
 Define that a route has to be correctly signed with a specific secret.
 
 ```perl
-get '/otherwebhook' => require_github_webhook_secret 'KUksrZyREtM32mIPoxcV7Cqx' => sub {
+post '/otherwebhook' => require_github_webhook_secret 'KUksrZyREtM32mIPoxcV7Cqx' => sub {
     do_something_with_correctly_signed_payload();
 };
 ```
 
 ```perl
-get '/otherwebhook' => require_github_webhook_secret config->{githubwebhooks}->{otherwebhook} => sub {
+post '/otherwebhook' => require_github_webhook_secret config->{githubwebhooks}->{otherwebhook} => sub {
     do_something_with_correctly_signed_payload();
 };
 ```
@@ -44,7 +44,7 @@ get '/otherwebhook' => require_github_webhook_secret config->{githubwebhooks}->{
 ### require_github_webhook_secret [ $secret ]
 
 ```perl
-post '/delete-item/:id' => require_github_webhook_secret 'mysecret' => sub {
+post '/reload-app' => require_github_webhook_secret 'mysecret' => sub {
     ...
 };
 ```
@@ -77,7 +77,7 @@ After installing, you can find documentation for this module with the
 perldoc command.
 
 ```bash
-    perldoc Dancer2::Plugin::Github::Webhook
+perldoc Dancer2::Plugin::Github::Webhook
 ```
 
 If you want to contribute to this module, write me an email or create a

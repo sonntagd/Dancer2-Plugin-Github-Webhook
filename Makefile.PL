@@ -21,6 +21,11 @@ WriteMakefile(
         'Dancer2'     => 0,
         'Digest::SHA' => 0,
     },
+    TEST_REQUIRES => {
+        'Test::Pod::Coverage' => 1.08,
+        'Pod::Coverage'       => 0.18,
+        'JSON'                => 0,
+    },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Dancer2-Plugin-Github-Webhook-*' },
 );

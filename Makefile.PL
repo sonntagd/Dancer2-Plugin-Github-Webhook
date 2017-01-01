@@ -24,6 +24,7 @@ WriteMakefile(
     },
     TEST_REQUIRES => {
         'Test::Pod::Coverage' => 1.08,
+        'Test::CheckManifest' => 0,
         'Pod::Coverage'       => 0.18,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

@@ -1,0 +1,8 @@
+Dancer2-Plugin-Github-Webhook-*
+config.yml
+dancer2.pl
+Dockerfile
+.gitignore
+.git/*
+xt/boilerplate.t
+MANIFEST.SKIP

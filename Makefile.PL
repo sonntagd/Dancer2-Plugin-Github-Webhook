@@ -23,7 +23,7 @@ WriteMakefile(
         'Digest::SHA' => 0,
     },
     TEST_REQUIRES => {
-        'Test::Pod::Coverage' => 1.08,sw    
+        'Test::Pod::Coverage' => 1.08,
         'Test::CheckManifest' => 0,
         'Pod::Coverage'       => 0.18,
     },

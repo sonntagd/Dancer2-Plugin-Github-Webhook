@@ -10,7 +10,7 @@ WriteMakefile(
     ABSTRACT_FROM    => 'lib/Dancer2/Plugin/Github/Webhook.pm',
     LICENSE          => 'artistic_2',
     PL_FILES         => {},
-    MIN_PERL_VERSION => 5.006,
+    MIN_PERL_VERSION => 5.010,
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => 0,
     },
@@ -23,10 +23,20 @@ WriteMakefile(
         'Digest::SHA' => 0,
     },
     TEST_REQUIRES => {
-        'Test::Pod::Coverage' => 1.08,
+        'Test::Pod::Coverage' => 1.08,sw    
         'Test::CheckManifest' => 0,
         'Pod::Coverage'       => 0.18,
     },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+        resources   => {
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/sonntagd/Dancer2-Plugin-Github-Webhook.git',
+                web  => 'https://github.com/sonntagd/Dancer2-Plugin-Github-Webhook',
+            },
+        },
+},
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Dancer2-Plugin-Github-Webhook-*' },
 );
